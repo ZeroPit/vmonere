@@ -5,8 +5,8 @@ vmonere
 Monitor the virtual machine and host resource usage starting from very minimal duration
 
 
-##vmonere command line interface
-vmonere is a wrapper CLI for virtual machine monitoring and resource usage comparison effectively. Vmonere framework enables user to monitor
+##Vmonere Command Line Lnterface
+Vmonere is a wrapper CLI for virtual machine monitoring and resource usage comparison effectively. Vmonere framework enables user to monitor
 the real time guest and host resource usage.
 
 The following are the core functionalities of the vmonere CLI:
