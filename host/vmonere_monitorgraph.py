@@ -14,23 +14,23 @@ import sys, time, subprocess
 
 #==============================================================================
 
-def monitor_cpu(vm_id):
+def domain_monitor():
 
 	#startWork = 'ssh -q -o StrictHostKeyChecking=no root@'+ip+' nohup bash /root/setup.sh &'
 	#subprocess.Popen(startWork, shell=True, stderr=subprocess.PIPE)
-	subprocess.Popen(['java', '-jar', '/var/lib/virtdc/vmonere/host/jars/cpumonitor.jar', vm_id])
+	subprocess.Popen(['java', '-jar', '/var/lib/virtdc/vmonere/graph/jars/vmmonitor.jar'])
 
 def monitor_memory(vm_id):
 
 	#startWork = 'ssh -q -o StrictHostKeyChecking=no root@'+ip+' nohup bash /root/setup.sh &'
 	#subprocess.Popen(startWork, shell=True, stderr=subprocess.PIPE)
-	subprocess.Popen(['java', '-jar', '/var/lib/virtdc/vmonere/host/jars/memorymonitor.jar', vm_id])
+	subprocess.Popen(['java', '-jar', '/var/lib/virtdc/vmonere/graph/jars/memorymonitor.jar', vm_id])
 
 def monitor_io(vm_id):
 
 	#startWork = 'ssh -q -o StrictHostKeyChecking=no root@'+ip+' nohup bash /root/setup.sh &'
 	#subprocess.Popen(startWork, shell=True, stderr=subprocess.PIPE)
-	subprocess.Popen(['java', '-jar', '/var/lib/virtdc/vmonere/host/jars/iomonitor.jar', vm_id])
+	subprocess.Popen(['java', '-jar', '/var/lib/virtdc/vmonere/graph/jars/iomonitor.jar', vm_id])
 
 if __name__ == "__main__":
    # stuff only to run when not called via 'import' here

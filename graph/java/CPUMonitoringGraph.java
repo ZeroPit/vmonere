@@ -1,4 +1,6 @@
+
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -12,40 +14,39 @@ import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.xy.XYAreaRenderer;
 import org.jfree.data.time.DynamicTimeSeriesCollection;
 import org.jfree.data.time.Second;
 import org.jfree.data.xy.XYDataset;
 
 /**
- * Class to monitor and produce graph output for IO usage from logs
+ * Class to monitor and produce graph output for CPU usage from logs
  * @author Rahul
  *
  */
-
-public class IOMonitoringGraph extends JPanel {
+public class CPUMonitoringGraph extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private static final int COUNT = 20;
 	private static final int FAST = 500;
-	public BufferedReader br;
+	public  BufferedReader br;
 	public static String vmid;
 	private Timer timer; 
-	public IOMonitoringGraph(String applicationTitle, String chartTitle, String args, BufferedReader bReader) {
+	public CPUMonitoringGraph(String applicationTitle, String chartTitle, String args, BufferedReader bReader, int chartWidth, int chartHeight) {
 		super(new BorderLayout());
 		br= bReader;
 		vmid = args;
 		final DynamicTimeSeriesCollection dataset = createDataset();
 		JFreeChart chart = createChart(dataset, chartTitle);
 		ChartPanel chartPanel = new ChartPanel(chart);
-		chartPanel.setPreferredSize(new java.awt.Dimension(500, 270));
+		chartPanel.setPreferredSize(new java.awt.Dimension(chartWidth, chartHeight));
 		chartPanel.repaint();
 		add(chartPanel, BorderLayout.CENTER);
 		timer = new Timer(FAST, new ActionListener() {
 			float[] newData = new float[1];
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				newData[0] = fetchIOData();
+				newData[0] = fetchCPUData();
 				dataset.advanceTime();
 				dataset.appendData(newData);
 			}
@@ -58,51 +59,55 @@ public class IOMonitoringGraph extends JPanel {
 	/**
 	 * Creates a DynamicTimeSeries dataset for a continuous moving graph 
 	 */
+
 	private  DynamicTimeSeriesCollection createDataset() {
 		final DynamicTimeSeriesCollection dataset =
 				new DynamicTimeSeriesCollection(1, COUNT, new Second());
 		dataset.setTimeBase(new Second());
-		dataset.addSeries(ioData(), 0, "IO data");
+		dataset.addSeries(cpuData(), 0, "CPU data");
 		return dataset;
 	}
+
 
 	/**
 	 * Creates the continuously updating graph
 	 */
+
 	private JFreeChart createChart(final XYDataset dataset, String title) {
 
 		final JFreeChart result = ChartFactory.createTimeSeriesChart(
 				title, "", "Value", dataset, true, true, false);
 		final XYPlot plot = result.getXYPlot();
-		ValueAxis domain = plot.getDomainAxis();
 		plot.setDomainGridlinesVisible(false);
+		plot.setRenderer(new XYAreaRenderer());
+		plot.getRenderer().setSeriesPaint(0, Color.BLUE);
+		ValueAxis domain = plot.getDomainAxis();
 		domain.setAutoRange(true);
 		domain.setVisible(false);
 		ValueAxis range = plot.getRangeAxis();
-		range.setRange(0, 100);
+		range.setRange(0, 8);
 		return result;
-
 	}
-
+	
 	/**
-	 * Fetches the IO data from the log file
+	 * Fetches the CPU data from the log file
 	 * @return
 	 */
-	private float fetchIOData() {
+	private float fetchCPUData() {
 		String currentLine;
 		try {
 			if ((currentLine = br.readLine()) != null && !currentLine.trim().equals("")) {
 				String[] currentValues = currentLine.split("\\|");
-				float ioValue = Float.valueOf(currentValues[5].trim());
-				if(ioValue<0)
+				float cpuValue = Float.valueOf(currentValues[2].trim());
+				if(cpuValue<0)
 				{
-					ioValue = 0;
+					cpuValue = 0;
 				}
-				else if (ioValue>100)
+				else if (cpuValue>800)
 				{
-					ioValue = 100;
+					cpuValue = 800;
 				}
-				return ioValue;
+				return cpuValue;
 			}
 		} catch (NumberFormatException e) {
 			e.printStackTrace();
@@ -116,7 +121,7 @@ public class IOMonitoringGraph extends JPanel {
 	 * Set initial values to zero for the first image of the graph
 	 * @return
 	 */
-	private float[] ioData() {
+	private float[] cpuData() {
 		float[] a = new float[COUNT];
 		for (int i = 0; i < a.length; i++) {
 			a[i] = 0;
