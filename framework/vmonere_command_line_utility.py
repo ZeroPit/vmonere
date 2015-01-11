@@ -20,9 +20,10 @@ import sys
 #==============================================================================
 
 
-
-
-
+def config_domain(file_format, file_name):
+    print "In Config domain"
+    print file_name
+    print file_format
 def get_host_name(vm_id):
     pass
 def get_ip(vmid):
