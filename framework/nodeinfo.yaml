@@ -1,0 +1,6 @@
+---
+nodesa: guests
+ -{ip: "192.168.1.11", hostname: node1}
+ -{ip: "192.168.1.12", hostname: node2}
+ -{ip: "192.168.1.11", hostname: node3}
+ -{ip: "192.168.1.11", hostname: node4}
