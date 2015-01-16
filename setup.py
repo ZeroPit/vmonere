@@ -16,12 +16,11 @@ setup(
       # Versions should comply with PEP440.  For a discussion on single-sourcing
       # the version across setup.py and the project code, see
       # https://packaging.python.org/en/latest/development.html#single-sourcing-the-version
-      version='0.1.0',
+      version='0.1.1',
       
       description=('A high-level Python  CLI for virtual machine '
                    'monitoring'),
-      long_description=('A high-level Python  CLI for cloud monitoring '
-                        'It is used to monitor the real time usage of resources '),
+      long_description=open("README.rst").read(),
       
       # The project's main homepage.
       url='http://dcsolvere.github.io/vmonere/',
